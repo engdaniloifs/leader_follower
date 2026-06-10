@@ -28,6 +28,11 @@ class pure_pursuit(Node):
       self.declare_parameter('qcarnumber', 1)
       self.qcarnumber = self.get_parameter('qcarnumber').get_parameter_value().integer_value
 
+      self.declare_parameter('config_dir', '')
+      self.config_dir = self.get_parameter('config_dir').get_parameter_value().string_value
+      if self.config_dir == '':
+          raise ValueError('config_dir parameter was not provided')
+
       self.desired_speed = 0.0
 
 
@@ -68,7 +73,7 @@ class pure_pursuit(Node):
       self.mode = 0 # task mode received from FlagsRobotsArray
       self.status = f'done {self.mode}'
 
-      csv_path = "/home/nvidia/Documents/parameters_leader_follower/path.csv"
+      csv_path = self.config_dir / "path.csv"
 
         # Read waypoints immediately at node startup
       self.waypoints = self.read_waypoints(csv_path)

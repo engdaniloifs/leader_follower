@@ -20,11 +20,21 @@ def generate_launch_description():
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
 
+    config_dir = PathJoinSubstitution([
+        FindPackageShare('qcar2_controller'),
+        'config'
+    ])
+
     pure_pursuit = Node(
         package='qcar2_controller',
         executable='pure_pursuit',
         name='pure_pursuit',
-        parameters=[{'qcarnumber': qcarnumber}],
+        parameters=[
+            {
+                'qcarnumber': qcarnumber,
+                'config_dir': config_dir
+            }
+        ],
         remappings=[(
             'vrpn_pose',
             ['vrpn_mocap/Qcar2_', qcarnumber, '/pose']   # becomes /qcar2/vrpn_mocap/Qcar2_2/pose under the namespace

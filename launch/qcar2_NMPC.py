@@ -19,12 +19,21 @@ def generate_launch_description():
         description='Numeric identifier for this QCar (e.g., 1, 2, 3)'
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
+    config_dir = PathJoinSubstitution([
+        FindPackageShare('qcar2_controller'),
+        'config'
+    ])
 
     NMPC = Node(
         package='qcar2_controller',
         executable='NMPC',
         name='NMPC',
-        parameters=[{'qcarnumber': qcarnumber}],
+        parameters=[
+            {
+                'qcarnumber': qcarnumber,
+                'config_dir': config_dir
+            }
+        ],
         remappings=[(
             'vrpn_pose',
             ['vrpn_mocap/Qcar2_', qcarnumber, '/pose']   # becomes /qcar2/vrpn_mocap/Qcar2_2/pose under the namespace
@@ -41,7 +50,13 @@ def generate_launch_description():
         package='qcar2_controller',
         executable='planner',
         name='planner',
-        parameters=[{'qcarnumber': qcarnumber,'controller_type': 'NMPC'}]
+        parameters=[
+            {
+                'qcarnumber': qcarnumber,
+                'controller_type': 'NMPC',
+                'config_dir': config_dir
+            }
+        ]
     )
 
     qcar2_hardware = Node(

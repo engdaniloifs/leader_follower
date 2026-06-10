@@ -33,6 +33,12 @@ class NMPC_node(Node):
       self.declare_parameter('qcarnumber', 1)
       self.qcarnumber = self.get_parameter('qcarnumber').get_parameter_value().integer_value
 
+      self.declare_parameter('config_dir', '')
+      self.config_dir = self.get_parameter('config_dir').get_parameter_value().string_value
+      if self.config_dir == '':
+          raise ValueError('config_dir parameter was not provided')
+      
+
       # =========================================================
       # State holders / initialization
       # =========================================================
@@ -61,7 +67,7 @@ class NMPC_node(Node):
       # =========================================================
       self.controller = nmpc(model_config={}, dt=self.dt)
 
-      nmpc_config_path = r"/home/nvidia/Documents/parameters_leader_follower/nmpc_tuning.yaml"
+      nmpc_config_path = self.config_dir / "nmpc_tuning.yaml"
       with open(nmpc_config_path, "r") as f:
           cfg = yaml.safe_load(f)
 
@@ -81,7 +87,7 @@ class NMPC_node(Node):
       # =========================================================
       # Error simulation configuration
       # =========================================================
-      error_simulation_path = r"/home/nvidia/Documents/parameters_leader_follower/error_simulation_config.yaml"
+      error_simulation_path = self.config_dir / "error_simulation_config.yaml"
       with open(error_simulation_path, "r") as f:
           error_params = yaml.safe_load(f)
 

@@ -19,6 +19,7 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseStamped, TwistStamped, Quaternion, Pose,Twist # Pose with ref frame and timestamp
 from scipy.spatial.transform import Rotation
 from rclpy.qos import QoSProfile, ReliabilityPolicy
+from pathlib import Path
 
 
 
@@ -34,9 +35,25 @@ class Path_planner(Node):
       self.qcarnumber = self.get_parameter('qcarnumber') \
           .get_parameter_value().integer_value
 
-      self.declare_parameter('controller_type', 'NMPC')
+      self.declare_parameter('controller_type', '')
       self.controller_type = self.get_parameter('controller_type') \
           .get_parameter_value().string_value
+      
+      if self.controller_type == '':
+          raise ValueError('controller_type parameter was not provided')
+      
+      self.declare_parameter('config_dir', '')
+
+      config_dir = (
+            self.get_parameter('config_dir')
+            .get_parameter_value()
+            .string_value
+        )
+
+      if config_dir == '':
+            raise ValueError('config_dir was not provided')
+
+      self.config_dir = Path(config_dir)
 
       # =========================================================
       # Timing
@@ -62,22 +79,22 @@ class Path_planner(Node):
       # Controller Configuration Selection
       # =========================================================
       if self.controller_type == "FBLinear":
-          config_path = r"/home/nvidia/Documents/parameters_leader_follower/fblinearization_tuning.yaml"
+          config_path = self.config_dir / "fblinearization_tuning.yaml"
           controller_name = "fblinearization"
 
       elif self.controller_type == "NMPC":
-          config_path = r"/home/nvidia/Documents/parameters_leader_follower/nmpc_tuning.yaml"
+          config_path = self.config_dir / "nmpc_tuning.yaml"
           controller_name = "nmpc"
 
       elif self.controller_type == "GMPC":
-          config_path = r"/home/nvidia/Documents/parameters_leader_follower/gmpc_tuning.yaml"
+          config_path = self.config_dir / "gmpc_tuning.yaml"
           controller_name = "gmpc"
 
       elif self.controller_type == "GMPC_ackermann":
-          config_path = r"/home/nvidia/Documents/parameters_leader_follower/gmpc_ackermann_tuning.yaml"
+          config_path = self.config_dir / "gmpc_ackermann_tuning.yaml"
           controller_name = "gmpc_ackermann"
       elif self.controller_type == "GMPC_phi":
-          config_path = r"/home/nvidia/Documents/parameters_leader_follower/gmpc_phi_tuning.yaml"
+          config_path = self.config_dir / "gmpc_phi_tuning.yaml"
           controller_name = "gmpc_phi"
 
       # =========================================================

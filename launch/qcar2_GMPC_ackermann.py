@@ -20,11 +20,21 @@ def generate_launch_description():
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
 
+    config_dir = PathJoinSubstitution([
+    FindPackageShare('qcar2_controller'),
+    'config'
+    ])
+
     GMPC_ackermann = Node(
         package='qcar2_controller',
         executable='GMPC_ackermann',
         name='GMPC_ackermann',
-        parameters=[{'qcarnumber': qcarnumber}],
+        parameters=[
+        {
+            'qcarnumber': qcarnumber,
+            'config_dir': config_dir,
+        }
+        ],
         remappings=[(
             'vrpn_pose',
             ['vrpn_mocap/Qcar2_', qcarnumber, '/pose']   # becomes /qcar2/vrpn_mocap/Qcar2_2/pose under the namespace
@@ -41,7 +51,13 @@ def generate_launch_description():
         package='qcar2_controller',
         executable='planner',
         name='planner',
-        parameters=[{'qcarnumber': qcarnumber, 'controller_type': 'GMPC_ackermann'}]
+        parameters=[
+            {
+                'qcarnumber': qcarnumber,
+                'controller_type': 'GMPC_ackermann',
+                'config_dir': config_dir
+            }
+        ]
     )
 
     qcar2_hardware = Node(
