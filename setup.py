@@ -27,7 +27,7 @@ setup(
             'leader_trajectory_eight = qcar2_controller.leader_trajectory_eight:main',
             'leader_trajectory = qcar2_controller.leader_trajectory:main',
             'planner = qcar2_controller.path_planner:main',
-            'FBLinear = qcar2_controller.FBLinear:main',
+            'FBlinear = qcar2_controller.FBlinear:main',
         ],
     },
 )
