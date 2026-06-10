@@ -20,11 +20,8 @@ def generate_launch_description():
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
 
-    config_dir = PathJoinSubstitution([
-    FindPackageShare('qcar2_controller'),
-    'config'
-    ])
-
+    config_dir = "/home/nvidia/ros2/src/qcar2_controller/config"
+    
     GMPC_ackermann = Node(
         package='qcar2_controller',
         executable='GMPC_ackermann',

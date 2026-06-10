@@ -20,10 +20,7 @@ def generate_launch_description():
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
 
-    config_dir = PathJoinSubstitution([
-    FindPackageShare('qcar2_controller'),
-    'config'
-    ])
+    config_dir = "/home/nvidia/ros2/src/qcar2_controller/config"
 
 
     FBLinear = Node(

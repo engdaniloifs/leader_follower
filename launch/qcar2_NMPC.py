@@ -19,10 +19,8 @@ def generate_launch_description():
         description='Numeric identifier for this QCar (e.g., 1, 2, 3)'
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
-    config_dir = PathJoinSubstitution([
-        FindPackageShare('qcar2_controller'),
-        'config'
-    ])
+    
+    config_dir = "/home/nvidia/ros2/src/qcar2_controller/config"
 
     NMPC = Node(
         package='qcar2_controller',
