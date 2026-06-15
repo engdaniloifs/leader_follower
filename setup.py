@@ -31,6 +31,7 @@ setup(
             'leader_trajectory = leader_controller.leader_trajectory:main',
             'planner = leader_controller.path_planner:main',
             'FBlinear = follower_controller.FBlinear:main',
+            'EKF = state_estimation.EKF:main',
         ],
     },
 )
