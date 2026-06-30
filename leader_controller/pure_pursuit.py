@@ -207,7 +207,7 @@ class pure_pursuit(Node):
           enable = 0.0
 
         # publishing commands
-        self.desired_steering = 0.4
+        self.desired_steering = 0.7
         self.nav_command(enable, speed_command)
         self.publish_steering_current()
 
