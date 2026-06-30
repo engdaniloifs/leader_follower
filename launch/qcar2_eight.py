@@ -21,7 +21,7 @@ def generate_launch_description():
     qcarnumber = LaunchConfiguration('qcarnumber')
 
     leader_trajectory_eight = Node(
-        package='qcar2_controller',
+        package='leader_follower',
         executable='leader_trajectory_eight',
         name='leader_trajectory_eight',
         parameters=[{'qcarnumber': qcarnumber}],

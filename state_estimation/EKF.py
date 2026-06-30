@@ -27,7 +27,7 @@ class EKF(Node):
         self.declare_parameter('qcarnumber', 1)
         self.qcarnumber = self.get_parameter('qcarnumber').get_parameter_value().integer_value
     
-        self.dt = 0.01  # time step (s)
+        self.dt = 0.02  # time step (s)
 
         self.max_steering_angle = 0.6  # steering limit [rad]
         self.steering_angle = 0.0       # current steering angle
@@ -42,6 +42,11 @@ class EKF(Node):
         self.measured_yaw = 0.0
         self.command_steering_angle = 0.0
         self.steering_angle_rate = 0.0
+
+        self.prev_measured_v_x = 0.0
+        self.prev_measured_v_y = 0.0
+        self.prev_measured_omega = 0.0
+        self.prev_command_steering_angle = 0.0
 
         # self.x_hat = 0.0
         # self.y_hat = 0.0
@@ -261,34 +266,34 @@ class EKF(Node):
 
     def publish_estimated_state(self):
       # Publish the estimated state as a PoseStamped message
-      estimated_states = Odometry()
-      estimated_states.header.stamp = self.get_clock().now().to_msg()
-      estimated_states.header.frame_id = 'map'  # or 'odom' depending on your setup
+      msg = Odometry()
+      msg.header.stamp = self.get_clock().now().to_msg()
+      msg.header.frame_id = 'map'  # or 'odom' depending on your setup
 
-      estimated_states.pose.position.x = self.states_hat[0]
-      estimated_states.pose.position.y = self.states_hat[1]
-      estimated_states.pose.position.z = 0.0
+      msg.pose.pose.position.x = self.states_hat[0]
+      msg.pose.pose.position.y = self.states_hat[1]
+      msg.pose.pose.position.z = 0.0
 
       yaw = self.states_hat[2]
       quat = Rotation.from_euler('z', yaw).as_quat()
-      estimated_states.pose.orientation.x = quat[0]
-      estimated_states.pose.orientation.y = quat[1]
-      estimated_states.pose.orientation.z = quat[2]
-      estimated_states.pose.orientation.w = quat[3]
+      msg.pose.pose.orientation.x = quat[0]
+      msg.pose.pose.orientation.y = quat[1]
+      msg.pose.pose.orientation.z = quat[2]
+      msg.pose.pose.orientation.w = quat[3]
 
       speed = (
           self.measured_v_x * np.cos(yaw)
           + self.measured_v_y * np.sin(yaw)
       )
 
-      estimated_states.twist.twist.linear.x = speed
-      estimated_states.twist.twist.linear.y = 0.0
-      estimated_states.twist.twist.linear.z = 0.0
-      estimated_states.twist.twist.angular.x = self.states_hat[3]  # steering angle
-      estimated_states.twist.twist.angular.y = self.steering_angle_rate  # steering angle rate
-      estimated_states.twist.twist.angular.z = self.measured_omega
+      msg.twist.twist.linear.x = speed
+      msg.twist.twist.linear.y = 0.0
+      msg.twist.twist.linear.z = 0.0
+      msg.twist.twist.angular.x = self.states_hat[3]  # steering angle
+      msg.twist.twist.angular.y = self.steering_angle_rate  # steering angle rate
+      msg.twist.twist.angular.z = self.measured_omega
 
-      self.publisher_estimated_states.publish(estimated_states)
+      self.publisher_estimated_states.publish(msg)
 
     def save_prev_estimation_variables(self):
       self.prev_command_steering_angle = self.command_steering_angle

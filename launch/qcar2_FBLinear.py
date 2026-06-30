@@ -24,7 +24,7 @@ def generate_launch_description():
 
 
     FBLinear = Node(
-        package='qcar2_controller',
+        package='leader_follower',
         executable='FBlinear',
         name='FBlinear',
         parameters=[
@@ -46,7 +46,7 @@ def generate_launch_description():
     )
 
     planner = Node(
-        package='qcar2_controller',
+        package='leader_follower',
         executable='planner',
         name='planner',
         parameters=[

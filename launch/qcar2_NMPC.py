@@ -23,7 +23,7 @@ def generate_launch_description():
     config_dir = "/home/nvidia/ros2/src/qcar2_controller/config"
 
     NMPC = Node(
-        package='qcar2_controller',
+        package='leader_follower',
         executable='NMPC',
         name='NMPC',
         parameters=[
@@ -45,7 +45,7 @@ def generate_launch_description():
     )
 
     planner = Node(
-        package='qcar2_controller',
+        package='leader_follower',
         executable='planner',
         name='planner',
         parameters=[

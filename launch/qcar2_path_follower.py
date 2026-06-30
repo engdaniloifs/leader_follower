@@ -20,10 +20,10 @@ def generate_launch_description():
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
 
-    config_dir = "/home/nvidia/ros2/src/qcar2_controller/config"
+    config_dir = "/home/nvidia/ros2/src/leader_follower/config"
 
     pure_pursuit = Node(
-        package='qcar2_controller',
+        package='leader_follower',
         executable='pure_pursuit',
         name='pure_pursuit',
         parameters=[
