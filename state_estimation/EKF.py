@@ -29,7 +29,7 @@ class EKF(Node):
     
         self.dt = 0.02  # time step (s)
 
-        self.max_steering_angle = 0.6  # steering limit [rad]
+        
         self.steering_angle = 0.0       # current steering angle
         self.ell = 0.256                # wheelbase
         self.tau_phi = 0.16              # steering time constant
@@ -67,7 +67,7 @@ class EKF(Node):
                           0.05**2,                  # x model noise: 1 cm per step
                           0.05**2,                  # y model noise: 1 cm per step
                           np.deg2rad(1.0)**2,        # yaw model noise
-                          np.deg2rad(5.0)**2         # steering model noise
+                          np.deg2rad(2.0)**2         # steering model noise
                       ])
 
         # Measurement noise covariance
@@ -75,7 +75,7 @@ class EKF(Node):
             0.001**2,                  # x measurement noise: 1 cm
             0.001**2,                  # y measurement noise: 1 cm
             np.deg2rad(0.1)**2,        # yaw measurement noise
-            np.deg2rad(5.0)**2         # omega measurement noise, rad/s
+            np.deg2rad(10.0)**2         # omega measurement noise, rad/s
         ])
         
 
@@ -164,6 +164,8 @@ class EKF(Node):
       self.predict_covariance(state_prev)
 
       self.update_with_measurements()
+
+      self.low_pass_filter_steering()
 
       self.save_prev_estimation_variables()
 
@@ -264,6 +266,17 @@ class EKF(Node):
       I = np.eye(4)
       self.P = (I - K @ H) @ self.P  # Update covariance
 
+    def low_pass_filter_steering(self):
+      alpha = 0.3
+
+      if not hasattr(self, "steering_angle_filtered"):
+          self.steering_angle_filtered = self.states_hat[3]
+
+      self.steering_angle_filtered = (
+          alpha * self.steering_angle_filtered
+          + (1.0 - alpha) * self.states_hat[3]
+      )
+
     def publish_estimated_state(self):
       # Publish the estimated state as a PoseStamped message
       msg = Odometry()
@@ -289,7 +302,7 @@ class EKF(Node):
       msg.twist.twist.linear.x = speed
       msg.twist.twist.linear.y = 0.0
       msg.twist.twist.linear.z = 0.0
-      msg.twist.twist.angular.x = self.states_hat[3]  # steering angle
+      msg.twist.twist.angular.x = self.steering_angle_filtered  # steering angle
       msg.twist.twist.angular.y = self.steering_angle_rate  # steering angle rate
       msg.twist.twist.angular.z = self.measured_omega
 
