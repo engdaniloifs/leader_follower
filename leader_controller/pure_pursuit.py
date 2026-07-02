@@ -207,8 +207,8 @@ class pure_pursuit(Node):
           enable = 0.0
 
         # publishing commands
-        #self.desired_steering = 0.4  # Ensure steering is in radians
-        # speed_command = 0.2  # Set a constant speed command
+        # self.desired_steering = np.deg2rad(25)  # Ensure steering is in radians
+        # speed_command = 0.5  # Set a constant speed command
         self.nav_command(enable, speed_command)
         self.publish_steering_current()
 
