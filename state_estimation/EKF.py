@@ -94,14 +94,14 @@ class EKF(Node):
 
         self.subscription_pose_vycon = self.create_subscription(
             PoseStamped,
-            'vrpn' + '/pose',  # becomes /qcar2_<qcarnumber>/vrpn_mocap/Qcar2_<qcarnumber>/pose under the namespace
+            'vrpn/pose',  # becomes /qcar2_<qcarnumber>/vrpn_mocap/Qcar2_<qcarnumber>/pose under the namespace
             self.pose_vycon_callback,
             QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT, depth=10)
         )
 
         self.subscription_velocity_vycon = self.create_subscription(
           TwistStamped,
-          'vrpn' + '/twist',  # becomes /qcar2_<qcarnumber>/vrpn_mocap/Qcar2_<qcarnumber>/twist under the namespace
+          'vrpn/twist',  # becomes /qcar2_<qcarnumber>/vrpn_mocap/Qcar2_<qcarnumber>/twist under the namespace
           self.velocity_vycon_callback,
           QoSProfile(
                                     reliability=ReliabilityPolicy.BEST_EFFORT,

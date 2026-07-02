@@ -332,7 +332,7 @@ class GMPC_ackermann_node(Node):
       time_end = time.time()
       elapsed_time = time_end - time_start
       self.nav_command(speed_command, self.desired_steering_angle)
-      self.calculate_current_steering()
+    #   self.calculate_current_steering()
       self.publish_solve_time(elapsed_time)
     
     def publish_solve_time(self, solve_time):
