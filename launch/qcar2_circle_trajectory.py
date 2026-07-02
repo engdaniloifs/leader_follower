@@ -37,10 +37,10 @@ def generate_launch_description():
         name='EKF',
         parameters=[{'qcarnumber': qcarnumber}],
         remappings=[(
-            'vrpn_twist',
+            'vrpn/twist',
             ['vrpn_mocap/Qcar2_', qcarnumber, '/twist']   # becomes /qcar2/vrpn_mocap/Qcar2_2/twist under the namespace
         ), (
-            'vrpn_pose',
+            'vrpn/pose',
             ['vrpn_mocap/Qcar2_', qcarnumber, '/pose']   # becomes /qcar2/vrpn_mocap/Qcar2_2/pose under the namespace
         )]
     )
