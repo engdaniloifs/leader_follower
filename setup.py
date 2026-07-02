@@ -29,7 +29,7 @@ setup(
             'GMPC_ackermann = follower_controller.GMPC_ackermann:main',
             'leader_trajectory_eight = leader_controller.leader_trajectory_eight:main',
             'leader_trajectory = leader_controller.leader_trajectory:main',
-            'planner = leader_controller.path_planner:main',
+            'planner = follower_controller.path_planner:main',
             'FBlinear = follower_controller.FBlinear:main',
             'EKF = state_estimation.EKF:main',
         ],

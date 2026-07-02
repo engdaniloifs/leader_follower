@@ -20,7 +20,7 @@ def generate_launch_description():
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
 
-    config_dir = "/home/nvidia/ros2/src/qcar2_controller/config"
+    config_dir = "/home/nvidia/ros2/src/leader_follower/config"
     
     GMPC_ackermann = Node(
         package='leader_follower',
